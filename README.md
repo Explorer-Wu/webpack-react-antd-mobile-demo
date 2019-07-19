@@ -1,6 +1,6 @@
-# webpack-react-family
-webpack-react-family-config
-webpack react 全家桶配置
+# webpack-react-mobile-family
+webpack-react-mobile-family-config
+webpack react mobile 全家桶配置
 
 
 In the project directory, you can run:

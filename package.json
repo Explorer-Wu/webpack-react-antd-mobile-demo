@@ -58,6 +58,7 @@
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.5.4",
     "@loadable/component": "^5.10.2",
+    "autoprefixer": "^9.6.1",
     "babel-eslint": "^10.0.2",
     "babel-istanbul": "^0.12.2",
     "babel-jest": "^24.8.0",
@@ -75,10 +76,10 @@
     "cssnano": "^4.1.10",
     "debug": "^4.1.1",
     "es6-promise-polyfill": "^1.2.0",
-    "eslint": "^6.0.1",
+    "eslint": "^5.16.0",
     "eslint-config-react-app": "^4.0.1",
     "eslint-friendly-formatter": "^4.0.1",
-    "eslint-loader": "^2.2.1",
+    "eslint-loader": "2.1.2",
     "eslint-plugin-flowtype": "^3.11.1",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
@@ -147,6 +148,5 @@
     "npm": ">= 3.0.0"
   },
   "keywords": [],
-  "author": "wwh",
-  "license": "ISC"
+  "author": "wwh"
 }
