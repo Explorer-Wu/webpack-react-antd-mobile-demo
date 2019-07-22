@@ -20,12 +20,12 @@
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties",
     //只需从 antd-mobile 引入模块即可，无需单独引入样式. babel-plugin-import 会帮助你加载 JS 和 CSS
-    // [
-    //   "import", 
-    //   { 
-    //     "libraryName": "antd-mobile", 
-    //     "style": "css" // `style: true` 会加载 less 文件
-    //   }
-    // ] 
+    [
+      "import", 
+      { 
+        "libraryName": "antd-mobile", 
+        "style": "css" // `style: true` 会加载 less 文件
+      }
+    ] 
   ]
 }

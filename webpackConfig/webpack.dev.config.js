@@ -31,26 +31,6 @@ const devConfig = {
     //     chunkFilename: '[name].[chunkhash].js',
     // },
     module: {
-        // rules: [{
-        //     test: /\.css$/,
-        //     // use: ExtractTextPlugin.extract({
-        //     //     fallback: "style-loader",
-        //     //     use: "css-loader",
-        //     //     publicPath: "/dist"
-        //     // })
-        //     use: [
-        //         'style-loader', 
-        //         {
-        //             loader: 'css-loader',
-        //             options: {
-        //                 modules: true,
-        //                 localIdentName: '[local]--[hash:base64:5]'
-        //             }
-        //         },
-        //         'postcss-loader',
-        //         // 'sass-loader'
-        //     ]
-        // }],
         rules: [
             {
                 test: /\.(js|mjs|jsx|ts|tsx)$/, //test: /\.(js|jsx)$/,  //test: /\.js$/,
@@ -67,7 +47,28 @@ const devConfig = {
                     }
                 }],
             },
-            ...utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+            // ...utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+            {
+                test: /\.css$/,
+                // use: ExtractTextPlugin.extract({
+                //     fallback: "style-loader",
+                //     use: "css-loader",
+                //     publicPath: "/dist"
+                // })
+                use: [
+                    'style-loader', 
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            // modules: true,
+                            // localIdentName: '[local]--[hash:base64:5]'s
+                            modules: { localIdentName: '[hash:base64:5][path]-[local]' }
+                        }
+                    },
+                    'postcss-loader',
+                    // 'sass-loader'
+                ]
+            }
         ]
     },
     optimization: {

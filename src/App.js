@@ -6,9 +6,9 @@ import { matchRoutes, renderRoutes } from "react-router-config";
 import { Flex, WhiteSpace } from 'antd-mobile';
 import Header from '@components/Header';
 import FooterTabBar from '@components/Footer';
-import '../public/static/css/normalize.css';
-import 'antd-mobile/dist/antd-mobile.css'; 
-import '../public/static/css/main.css'
+import 'public/static/css/normalize.css';
+// import 'antd-mobile/dist/antd-mobile.css'; 
+import 'public/static/css/main.css'
 // import renderRoutes from '@router/index'
 // import routes from '@router/routesConfig'
 
