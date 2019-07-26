@@ -12,7 +12,7 @@ let config = require('./index')
 module.exports = {
     //webpack 的主目录,基础目录，绝对路径，用于从配置中解析入口起点(entry point)和 loader
     // entry 和 module.rules.loader 选项,相对于此目录解析
-    context: path.resolve(__dirname, '../'),
+    context: utils.resolve('/'),
     entry: {
         app: [
             '@babel/polyfill',
@@ -149,18 +149,18 @@ module.exports = {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css', '.scss', '.less', '.tpl', 'png', 'jpg', 'jpeg', 'gif'], 
         //配置别名，在项目中可缩减引用路径 
         alias: {
-            'public': utils.resolve('public'), //path.join(__dirname, '../public'),
-            '@pages': utils.resolve('src/pages'),
-            '@router': utils.resolve('src/router'),
-            '@components': utils.resolve('src/components'),
-            '@containers': utils.resolve('src/reduxstore/containers'),
-            '@actions': utils.resolve('src/reduxstore/actions'),
-            '@reducers': utils.resolve('src/reduxstore/reducers'),
-            '@store': utils.resolve('src/reduxstore/store'),
-            '@utils': utils.resolve('src/utils'),
-            '@api': utils.resolve('src/api'),
-            'mock': utils.resolve('mock'),
-            '@': utils.resolve('src'),
+            'public': utils.resolve('/public'), //path.join(__dirname, '../public'),
+            '@views': utils.resolve('/src/views'),
+            '@router': utils.resolve('/src/router'),
+            '@components': utils.resolve('/src/components'),
+            '@containers': utils.resolve('/src/reduxstore/containers'),
+            '@actions': utils.resolve('/src/reduxstore/actions'),
+            '@reducers': utils.resolve('/src/reduxstore/reducers'),
+            '@store': utils.resolve('/src/reduxstore/store'),
+            '@utils': utils.resolve('/src/utils'),
+            '@api': utils.resolve('/src/api'),
+            'mock': utils.resolve('/mock'),
+            '@': utils.resolve('/src'),
             // 'static': utils.resolve('static'),
         }
     },

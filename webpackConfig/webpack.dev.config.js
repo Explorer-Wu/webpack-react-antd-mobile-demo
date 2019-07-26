@@ -56,15 +56,19 @@ const devConfig = {
                 //     publicPath: "/dist"
                 // })
                 use: [
-                    'style-loader', 
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            // modules: true,
-                            // localIdentName: '[local]--[hash:base64:5]'s
-                            modules: { localIdentName: '[hash:base64:5][path]-[local]' }
-                        }
-                    },
+                    'style-loader',
+                    'css-loader',
+                    // {
+                    //     loader: 'css-loader',
+                    //     options: {
+                    //         modules: {
+                    //             mode: 'local',
+                    //             localIdentName: '[path][name]__[local]--[hash:base64:5]',
+                    //             context: utils.resolve('/'),
+                    //             hashPrefix: 'my-custom-hash',
+                    //         }  
+                    //     }
+                    // },
                     'postcss-loader',
                     // 'sass-loader'
                 ]

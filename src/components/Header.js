@@ -1,19 +1,25 @@
 import React, { PureComponent } from 'react';
-import { Drawer, List, Menu, ActivityIndicator, NavBar, Icon } from 'antd-mobile';
+import { NavBar, Icon, Menu, ActivityIndicator, SearchBar, Button, Drawer, List, Popover } from 'antd-mobile';
 import logo from 'public/static/images/logo.svg';
 // import { Link } from 'react-router-dom';props.
 // import { BrowserRouter, Route, Link } from 'react-router-dom'
+const Item = Popover.Item;
+const myImg = src => <img src={`https://gw.alipayobjects.com/zos/rmsportal/${src}.svg`} className="am-icon am-icon-xs" alt="" />;
 
-export class HeadTop extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-          initData: '',
-          show: false,
-        };
+export class HeaderNav extends PureComponent {
+    constructor(...args) {
+      super(...args);
+      this.state = {
+        initData: '',
+        show: false,
+        visible: false,
+        selected: '',
+      };
     }
+  
     onChange = (value) => {
-        let label = '';
+      let label = '';
+      console.log("menuData:", this.props.menuData);
         this.props.menuData.forEach((dataItem) => {
           if (dataItem.value === value[0]) {
             label = dataItem.label;
@@ -45,9 +51,24 @@ export class HeadTop extends PureComponent {
     }
     
     onMaskClick = () => {
-        this.setState({
-          show: false,
-        });
+      this.setState({
+        show: false,
+      });
+    }
+  
+    onSelect = (opt) => {
+      // console.log(opt.props.value);
+      this.setState({
+        visible: false,
+        selected: opt.props.value,
+      });
+    }
+  
+    handleVisibleChange = (visible) => {
+    console.log("visible:", visible);
+      this.setState({
+        visible
+      });
     }
     
     render() {
@@ -68,24 +89,60 @@ export class HeadTop extends PureComponent {
           </div>
         );
 
-        return (
+      return (
           <div className={show ? 'single-menu-active' : ''}>
-            <div>
-                <NavBar
-                    mode="dark"
-                    // icon={<Icon type="left" />}
-                    leftContent="Menu"
-                    icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/iXVHARNNlmdCGnwWxQPH.svg" className="am-icon am-icon-md" alt="" />}
-                    onLeftClick={this.handleClick}
-                    rightContent={[
-                        <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-                        <Icon key="1" type="ellipsis" />,
-                    ]}
-                    className="single-top-nav-bar"
+            <NavBar
+              leftContent="Menu"
+              // icon={<Icon type="left" />}
+              icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/iXVHARNNlmdCGnwWxQPH.svg" className="am-icon am-icon-md" alt="" />}
+              mode="dark"
+              onLeftClick={this.handleClick}
+            rightContent={[
+                // <SearchBar
+                //   key="right01" 
+                //   placeholder="Search"
+                //   onClear={value => console.log(value, 'onClear')}
+                //   // onFocus={() => console.log('onFocus')}
+                //   // onBlur={() => console.log('onBlur')}
+                //   // onCancel={() => console.log('onCancel')}
+                //   // showCancelButton
+                //   style={{width: '100%'}}
+                // />,
+                <Icon key="right01" type="search" style={{ marginRight: '16px' }} />,
+                <Popover key="right02" mask
+                  overlayClassName="fortest"
+                  overlayStyle={{ color: 'currentColor' }}
+                  visible={this.state.visible}
+                  overlay={[
+                    (<Item key="4" value="scan" icon={myImg('tOtXhkIWzwotgGSeptou')} data-seed="logId">Scan</Item>),
+                    (<Item key="5" value="special" icon={myImg('PKAgAqZWJVNwKsAJSmXd')} style={{ whiteSpace: 'nowrap' }}>My Qrcode</Item>),
+                    (<Item key="6" value="button ct" icon={myImg('uQIYTFeRrjPELImDRrPt')}>
+                      <span style={{ marginRight: 5 }}>Help</span>
+                    </Item>),
+                  ]}
+                  align={{
+                    overflow: { adjustY: 0, adjustX: 0 },
+                    offset: [-10, 0],
+                  }}
+                  onVisibleChange={this.handleVisibleChange}
+                  onSelect={this.onSelect}
                 >
-                    OneLevel menu
-                </NavBar>
-            </div>
+                  <div style={{
+                    height: '100%',
+                    // padding: '0 15px',
+                    // marginRight: '-15px',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                  >
+                    <Icon type="ellipsis" />
+                  </div>
+                </Popover>
+              ]}
+              className="single-top-nav-bar"
+            >
+            </NavBar>
+            
             {show ? initData ? menuEl : loadingEl : null}
             {show ? <div className="menu-mask" onClick={this.onMaskClick} /> : null}
           </div>
@@ -93,4 +150,4 @@ export class HeadTop extends PureComponent {
     }
 }
 
-export default HeadTop;
+export default HeaderNav;

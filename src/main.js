@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
-import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
-
-import App from './App';
+// import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
+import Routers from '@router/index'
+// import App from '@components/App';
 // import * as serviceWorker from './serviceWorker';
 
-const supportsHistory = 'pushState' in window.history;
+// const supportsHistory = 'pushState' in window.history;
 
 ReactDOM.render(
-    <Router forceRefresh={!supportsHistory}>
-        <App/>
-    </Router>, 
+    // <Router forceRefresh={!supportsHistory}>
+    //     <App/>
+    // </Router>, 
+    Routers,
     document.getElementById('root')
 );
 

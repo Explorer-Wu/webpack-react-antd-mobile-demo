@@ -3,14 +3,13 @@ import React, {Component} from 'react';
 // import history from '@router/history'
 // import { BrowserRouter as Router } from 'react-router-dom';
 import { matchRoutes, renderRoutes } from "react-router-config";
-import { Flex, WhiteSpace } from 'antd-mobile';
-import Header from '@components/Header';
+import { Flex, WingBlank, WhiteSpace } from 'antd-mobile';
+import routes from '@router/routesConfig'
+import HeaderNav from '@components/Header';
 import FooterTabBar from '@components/Footer';
 import 'public/static/css/normalize.css';
 // import 'antd-mobile/dist/antd-mobile.css'; 
 import 'public/static/css/main.css'
-// import renderRoutes from '@router/index'
-// import routes from '@router/routesConfig'
 
 class App extends Component {
     constructor(props) {
@@ -37,17 +36,18 @@ class App extends Component {
     render() {
         const { match } = this.props
         return (
-          <>
+          <div className="flex-container">
             {/* <div className="sub-title">Basic</div> */}
-            <Header menuData={this.menuData}></Header>
+            <HeaderNav menuData={this.menuData}></HeaderNav>
             {/* <Flex>
               <Flex.Item>  </Flex.Item>  
               <Flex.Item>  </Flex.Item>
             </Flex> */}
-            {/* {renderRoutes(routes, match)} */}
+            <WingBlank size="sm">
+              {/* {renderRoutes(routes, match)} */}
+            </WingBlank>
             <FooterTabBar></FooterTabBar>
-            
-          </>                  
+          </div>                  
         );
     }
 }
