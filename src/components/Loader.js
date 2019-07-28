@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Suspense, lazy} from 'react';
 import PropTypes from 'prop-types';
 import NoMatch from '@views/Error/NoMatch';
 
@@ -47,6 +47,11 @@ export default class Loader extends Component {
 
   loadComponent(path) {
     let filePath = this.parseUrl(path);
+    
+    // this.setState({
+    //   instance: lazy(() => import(filePath))
+    // });
+
     this.props.import(filePath).then(component => {
       if (typeof component === 'string') {
         this.setState({
@@ -55,7 +60,7 @@ export default class Loader extends Component {
         });
       } else {
         this.setState({
-          instance: component
+          instance: (<component/>)
         });
       }
     });

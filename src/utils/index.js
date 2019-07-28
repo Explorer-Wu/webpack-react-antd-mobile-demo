@@ -1,3 +1,5 @@
+import React from 'react';
+
 function param(json) {
   if (!json) return ''
   return Object.keys(json).map(key => {
@@ -41,9 +43,8 @@ function getQuery(str) {
 //获得组件
 function getComponent(path) {
   console.log("component:", import(`${path}/index`), path);
-  return import(path).then(component => {
-    
-    return component.default;
+  return import(path).then(Component => {
+    return <Component.default/>
   }).catch(error => {
     return 'not found 404 ' + error;
   });
