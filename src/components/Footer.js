@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import {withRouter} from 'react-router-dom';
+import { matchRoutes, renderRoutes } from "react-router-config";
+import { withRouter } from 'react-router-dom';
+import routes from '@router/routesConfig'
 import { TabBar } from 'antd-mobile';
 import {getQuery, getComponent} from '@utils/index';
 import Loader from './Loader';
@@ -14,25 +16,41 @@ class FooterTabBar extends PureComponent {
     };
   }
 
-  componentDidMount() {
-    this.renderContent('home');
-    // this.props.history.push('/app/home');
-  }
+  // componentDidMount() {
+  //   this.renderContent('home');
+  //   // this.props.history.push('/app/home');
+  // }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.selectedTab !== this.state.selectedTab) {
+  //     // this.renderContent(prevState.selectedTab);
+  //     this.renderContent(this.state.selectedTab);
+  //   }
+  // }
 
   changeTabFn = (tab) => {
-    this.props.history.push('/app/'+ tab)
+    this.props.history.push('/views/'+ tab)
     this.setState({
       selectedTab: tab,
     });
   }
+
   renderContent(pageText) {
-    console.log('location:', this.props)
-    return <Loader path={this.props.location.pathname} query={getQuery(this.props.location.search)} import={getComponent} {...this.props}/>
+    const { match } = this.props
+    console.log('renderContent:', this.props)
+    // if (pageText === this.state.selectedTab) {
+    //   console.log('pageText:', pageText)
+    //   return <div key={pageText}>{renderRoutes(routes, match)}</div>
+    // } else {
+    //   return null
+    // }  
+    return <div key={pageText}>{renderRoutes(routes, match)}</div>
   }
   
   render() {
+    const { match } = this.props
     return (
-      <div style={{ position: 'fixed', height: '100%', width: '100%', top: 60 }}>
+      <div style={{ position: 'fixed', width: '100%', height: '60px', bottom: 0}}>
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"
@@ -63,8 +81,8 @@ class FooterTabBar extends PureComponent {
             }}
             data-seed="logId"
           >
-            {/* <ListViewInfos /> */}
-            {this.renderContent('Home')}
+            {/* {(this.state.selectedTab === 'home'? this.renderContent('home'): null)} */}
+            {/* {this.renderContent('home')} */}
           </TabBar.Item>
           <TabBar.Item
             icon={
@@ -90,7 +108,7 @@ class FooterTabBar extends PureComponent {
             }}
             data-seed="logId1"
           >
-            {this.renderContent('topics')}
+            {/* {(this.state.selectedTab === 'topics'? this.renderContent('topics') : null)} */}
           </TabBar.Item>
           <TabBar.Item
             icon={
@@ -115,7 +133,7 @@ class FooterTabBar extends PureComponent {
               this.changeTabFn('friend')
             }}
           >
-            {this.renderContent('friend')}
+            {/* {(this.state.selectedTab === 'friend'? this.renderContent('friend') : null)} */}
           </TabBar.Item>
           <TabBar.Item
             icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
@@ -127,7 +145,7 @@ class FooterTabBar extends PureComponent {
               this.changeTabFn('user')
             }}
           >
-            {this.renderContent('user')}
+            {/* {(this.state.selectedTab === 'user'? this.renderContent('user') : null)} */}
           </TabBar.Item>
         </TabBar>
       </div>

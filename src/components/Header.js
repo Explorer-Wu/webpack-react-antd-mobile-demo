@@ -90,7 +90,7 @@ export class HeaderNav extends PureComponent {
         );
 
       return (
-          <div className={show ? 'single-menu-active' : ''}>
+          <div className={show ? 'single-menu-active' : ''} style={{ position: 'fixed', width: '100%', height: '50px', top: 0, zIndex: 1000}}>
             <NavBar
               leftContent="Menu"
               // icon={<Icon type="left" />}

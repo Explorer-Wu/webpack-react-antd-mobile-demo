@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import logo from 'public/static/images/logo.svg';
+import techPic from 'public/static/images/techlog.jpg'
 
 class Todo extends Component {
     constructor(props) {
@@ -60,6 +61,8 @@ class Todo extends Component {
               当前时间： {this.state.date.toLocaleTimeString()} <br/>
               计数：{this.state.counter}
           </p>
+          
+          <img src={techPic} width="100%" height="auto" alt="test" />
         </div>
       )
     }

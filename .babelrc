@@ -4,7 +4,9 @@
       "@babel/preset-env",
       {
         "useBuiltIns": "entry",
-        "corejs": 2
+        "corejs": 2,
+        
+        "targets": { "browsers": ["last 2 versions", "Firefox ESR", "> 1%", "ie >= 10", "iOS >= 8", "Android >= 4"] }
       }
     ],
     // "@babel/preset-es2015",
@@ -19,13 +21,18 @@
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties",
+    // ["@babel/plugin-transform-runtime", { "regenerator": true }],
+    // ["@babel/plugin-proposal-class-properties", { "loose": true }],
     //只需从 antd-mobile 引入模块即可，无需单独引入样式. babel-plugin-import 会帮助你加载 JS 和 CSS
     [
       "import", 
       { 
         "libraryName": "antd-mobile", 
-        "style": "css" // `style: true` 会加载 less 文件
+        "style": "css", // `style: true` 会加载 less 文件
+        // "libraryDirectory": "es"
       }
-    ] 
+    ],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }], 
   ]
 }

@@ -8,10 +8,11 @@ export default class Loader extends Component {
     super(prop);
     this.state = {
       newPath: this.props.path,
-      instance: null,
+      instance: false,
       noFound: false,
       loadError: ''
     };
+    this.InitComponet = null;
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -47,23 +48,37 @@ export default class Loader extends Component {
 
   loadComponent(path) {
     let filePath = this.parseUrl(path);
+    console.log("filePath:", path, filePath);
+    // console.log("component00:", import(filePath), lazy(() => import(filePath)));
+    this.InitComponet = lazy(() => import(filePath))
+    console.log("component01:", typeof component, this.InitComponet);
     
-    // this.setState({
-    //   instance: lazy(() => import(filePath))
-    // });
-
-    this.props.import(filePath).then(component => {
-      if (typeof component === 'string') {
+      if (typeof this.InitComponet === 'string') {
         this.setState({
           noFound: true,
-          loadError: component
+          loadError: this.InitComponet
         });
       } else {
         this.setState({
-          instance: (<component/>)
+          instance: true
+        }, () => {
+          console.log("component02:", this.state.instance); 
         });
       }
-    });
+
+    // this.props.import('../views/Home').then(component => {
+    //   console.log("component:", component);
+    //   if (typeof component === 'string') {
+    //     this.setState({
+    //       noFound: true,
+    //       loadError: component
+    //     });
+    //   } else {
+    //     this.setState({
+    //       instance: component
+    //     });
+    //   }
+    // });
   }
 
   //解析url
@@ -98,15 +113,25 @@ export default class Loader extends Component {
     return hump.join('');
   }
 
+  getPath() {
+    return '@views/Home'
+  }
 
-  renderComponent() {
-    let Instance = this.state.instance;
-    return <Instance {...this.props}/>;
+  renderComponent(instance) {
+    // let Instance = instance;
+    const fpath = "../views/Home/index.js"
+    const Instance = lazy(() => import('@views/Home'))
+    return (<div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Instance {...this.props} />
+    </Suspense>
+    </div>)
+    // <instance {...this.props}/>
   }
 
   render() {
     if (this.state.instance) {
-      return this.renderComponent();
+      return this.renderComponent(this.InitComponet);
     } else {
       return (
         <div>

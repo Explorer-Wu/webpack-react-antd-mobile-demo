@@ -1,8 +1,8 @@
 
 import React, {Component} from 'react';
 // import history from '@router/history'
-// import { BrowserRouter as Router } from 'react-router-dom';
-import { matchRoutes, renderRoutes } from "react-router-config";
+import { withRouter } from 'react-router-dom';
+import { renderRoutes } from "react-router-config";
 import { Flex, WingBlank, WhiteSpace } from 'antd-mobile';
 import routes from '@router/routesConfig'
 import HeaderNav from '@components/Header';
@@ -43,9 +43,9 @@ class App extends Component {
               <Flex.Item>  </Flex.Item>  
               <Flex.Item>  </Flex.Item>
             </Flex> */}
-            <WingBlank size="sm">
-              {/* {renderRoutes(routes, match)} */}
-            </WingBlank>
+            <div style={{ marginTop: 50 }}>
+              {renderRoutes(routes[0].routes, match)}
+            </div>
             <FooterTabBar></FooterTabBar>
           </div>                  
         );
