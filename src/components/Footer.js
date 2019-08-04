@@ -16,10 +16,13 @@ class FooterTabBar extends PureComponent {
     };
   }
 
-  // componentDidMount() {
-  //   this.renderContent('home');
-  //   // this.props.history.push('/app/home');
-  // }
+  componentDidMount() {
+    console.log('location:', this.props.location)
+    const pathArr = this.props.location.pathname.split('/')
+    this.setState({
+      selectedTab: pathArr[pathArr.length-1],
+    });
+  }
 
   // componentDidUpdate(prevProps, prevState) {
   //   if (prevState.selectedTab !== this.state.selectedTab) {
@@ -81,7 +84,6 @@ class FooterTabBar extends PureComponent {
             }}
             data-seed="logId"
           >
-            {/* {(this.state.selectedTab === 'home'? this.renderContent('home'): null)} */}
             {/* {this.renderContent('home')} */}
           </TabBar.Item>
           <TabBar.Item
