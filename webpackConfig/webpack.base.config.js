@@ -18,7 +18,7 @@ module.exports = {
             '@babel/polyfill',
             './src/main.js' //resolve('/src/main.js')
         ],
-        vendor: ['react', 'react-dom'] //['react', 'react-router-dom', 'redux', 'react-dom', 'react-redux']
+        // vendor: ['react', 'react-dom', 'react-router-dom', 'react-router-config'] //['react', 'redux', 'react-dom', 'react-redux']
     },
     output: {
         path: config.build.assetsRoot,  //path: resolve('/dist'),

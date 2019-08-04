@@ -27,7 +27,7 @@ const chalk = require('chalk')
 const devWebpackConfig = require('../webpackConfig/webpack.dev.config');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 // Add FriendlyErrorsPlugin
-devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
+devWebpackConfig[1].plugins.push(new FriendlyErrorsPlugin({
   compilationSuccessInfo: {
     messages: [`Your application is running here: http://${HOST}:${PORT}`],
   },
@@ -36,8 +36,10 @@ devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
     : undefined
 }))
 
-const compiler = Webpack(devWebpackConfig);
-const devServerConfig = Object.assign({}, devWebpackConfig.devServer, {
+Webpack(devWebpackConfig[0]);
+
+const compiler = Webpack(devWebpackConfig[1]);
+const devServerConfig = Object.assign({}, devWebpackConfig[1].devServer, {
   // open: true,
   // hot: true,
   // lazy: true,
@@ -45,6 +47,9 @@ const devServerConfig = Object.assign({}, devWebpackConfig.devServer, {
   // config:
   progress: true,
   stats: {
+    timings: true,
+    version: true,
+    warnings: true,
     colors: true,
   },
 });
