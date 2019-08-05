@@ -10,6 +10,7 @@ let config = require('./index')
 
 // const commonConfig
 module.exports = {
+    context: utils.resolve('/'),
     name: "vendor",
     //要打包的模块的数组
     entry: {
@@ -26,7 +27,7 @@ module.exports = {
         ]
     },
     output: {
-        path: config.build.assetsRoot+'/libs',  //path: resolve('/dist'),
+        path: '/libs',  // config.build.assetsRoot+
         filename: '[name].dll.js',
         // filename: '[name].[hash]js',
         chunkFilename: '[name].dll.[chunkhash].js',  //决定 non-entry chunk(非入口 chunk) 的名称
@@ -147,22 +148,22 @@ module.exports = {
             },
         ]
     },
-    optimization: {
-        sideEffects: true
-	},
+    // optimization: {
+    //     sideEffects: true
+	// },
     plugins: [
         new webpack.ProgressPlugin(),
         // 清除上一次生成的文件
-        new CleanWebpackPlugin(),
-        // new CleanWebpackPlugin([`/libs`], {
-        //     root: utils.resolve('/dist'),
-        //     verbose: true, 
-        //     dry: false,
-        // }),
+        // new CleanWebpackPlugin(), ['/libs'], 
+        new CleanWebpackPlugin({
+            // root: utils.resolve('/libs'), // 绝对路径 utils.resolve('/dist'),
+            verbose: true, // 是否显示到控制台
+            dry: false // 不删除所有
+        }),
         new webpack.DllPlugin({
-            path: utils.resolve('/dist/libs/[name]-dll-manifest.json'),
+            path: utils.resolve('/libs/[name]-dll-manifest.json'),
             name: '[name]_dll_[hash]', 
-            context: utils.resolve('/dist/libs/'), 
+            context: utils.resolve('/libs/'), 
         }),
     ],
 };

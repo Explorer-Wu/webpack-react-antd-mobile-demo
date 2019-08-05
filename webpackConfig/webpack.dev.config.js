@@ -4,7 +4,6 @@ const utils = require('./utils')
 const config = require('../webpackConfig')
 const merge = require('webpack-merge')
 const path = require('path')
-const dllWebpackConfig = require('./webpack.dll.config')
 const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -123,8 +122,8 @@ const devConfig = {
         }),
         //开发环境使用dll分割代码
         new webpack.DllReferencePlugin({
-            context: utils.resolve('/dist/libs/'),  //(绝对路径) manifest (或者是内容属性)中请求的上下文
-            manifest: utils.resolve('/dist/libs/[name]-dll-manifest.json'), //包含 content 和 name 的对象，或者在编译时(compilation)的一个用于加载的 JSON manifest 绝对路径
+            context: utils.resolve('/libs'),  //(绝对路径) manifest (或者是内容属性)中请求的上下文
+            manifest: utils.resolve('/[name]-dll-manifest.json'), //包含 content 和 name 的对象，或者在编译时(compilation)的一个用于加载的 JSON manifest 绝对路径
             //dll 暴露的地方的名称 (默认值为 manifest.name) (可参考 externals)
             name: '[name]_dll_[hash]', // 当前Dll的所有内容都会存放在这个参数指定变量名的一个全局变量下，注意与DllPlugin的name参数保持一致
            // dll 是如何暴露的 (libraryTarget)
@@ -152,42 +151,43 @@ const devConfig = {
         ])
     ],
     // library 需要一个名为 lodash 的依赖，这个依赖在 consumer 环境中必须存在且可用
-    externals: [
-        {
-          // String
-        //   react: 'react',
-          'react': {
-            commonjs: 'react',
-            commonjs2: 'react',
-            amd: 'react',
-            root: 'React',
-          },
-          'react-dom': {
-            commonjs: 'react-dom',
-            commonjs2: 'react-dom',
-            amd: 'react-dom',
-            root: 'ReactDOM',
-          },
-          // Object
-          'lodash': {
-            commonjs: 'lodash',
-            commonjs2: 'lodash',
-            amd: 'lodash',
-            root: '_' // indicates global variable
-          },
-          'react-router-dom': 'react-router-dom',
-        //   'react-redux': 'react-redux'
-          // Array,  subtract 可以通过全局 math 对象下的属性 subtract 访问（例如 window['math']['subtract']）
-          //subtract: ['./math', 'subtract'] 
-        },
-        // Function 对于 webpack 外部化，通过定义函数来控制行为, 'commonjs'+ request 定义了需要外部化的模块类型。
-        // function(context, request, callback) {
-        //     if (/^yourregex$/.test(request)){
-        //     return callback(null, 'commonjs ' + request);
-        //     }
-        //     callback();
-        // },
-    ]
+    // externals: [
+    //     {
+    //       // String
+    //     //   react: 'react',
+    //       'react': {
+    //         commonjs: 'react',
+    //         commonjs2: 'react',
+    //         amd: 'react',
+    //         root: 'React',
+    //       },
+    //       'react-dom': {
+    //         commonjs: 'react-dom',
+    //         commonjs2: 'react-dom',
+    //         amd: 'react-dom',
+    //         root: 'ReactDOM',
+    //       },
+    //       // Object
+    //       'lodash': {
+    //         commonjs: 'lodash',
+    //         commonjs2: 'lodash',
+    //         amd: 'lodash',
+    //         root: '_' // indicates global variable
+    //       },
+    //         'react-router-dom': 'react-router-dom',
+    //         'react-router-config': 'react-router-config'
+    //     //   'react-redux': 'react-redux'
+    //       // Array,  subtract 可以通过全局 math 对象下的属性 subtract 访问（例如 window['math']['subtract']）
+    //       //subtract: ['./math', 'subtract'] 
+    //     },
+    //     // Function 对于 webpack 外部化，通过定义函数来控制行为, 'commonjs'+ request 定义了需要外部化的模块类型。
+    //     // function(context, request, callback) {
+    //     //     if (/^yourregex$/.test(request)){
+    //     //     return callback(null, 'commonjs ' + request);
+    //     //     }
+    //     //     callback();
+    //     // },
+    // ]
 };
 
 // const devWebpackConfig = merge({
@@ -201,4 +201,4 @@ const devConfig = {
 //     }
 // })(baseWebpackConfig, devConfig);
 
-module.exports = [dllWebpackConfig, merge(baseWebpackConfig, devConfig)];
+module.exports = merge(baseWebpackConfig, devConfig);

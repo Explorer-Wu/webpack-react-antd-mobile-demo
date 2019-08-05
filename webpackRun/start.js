@@ -1,4 +1,4 @@
-'use strict'
+
 require('./check-versions')()
 
 //"start": "webpack-dev-server --inline --color --progress --config --hot webpackConfig/webpack.dev.config.js",
@@ -24,39 +24,11 @@ const chalk = require('chalk')
 // const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 // const { choosePort, createCompiler, prepareProxy, prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
 // const openBrowser = require('react-dev-utils/openBrowser');
+const dllWebpackConfig = require('../webpackConfig/webpack.dll.config')
 const devWebpackConfig = require('../webpackConfig/webpack.dev.config');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-// Add FriendlyErrorsPlugin
-devWebpackConfig[1].plugins.push(new FriendlyErrorsPlugin({
-  compilationSuccessInfo: {
-    messages: [`Your application is running here: http://${HOST}:${PORT}`],
-  },
-  onErrors: config.dev.notifyOnErrors
-    ? utils.createNotifierCallback()
-    : undefined
-}))
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
-Webpack(devWebpackConfig[0]);
-
-const compiler = Webpack(devWebpackConfig[1]);
-const devServerConfig = Object.assign({}, devWebpackConfig[1].devServer, {
-  // open: true,
-  // hot: true,
-  // lazy: true,
-  inline: true,
-  // config:
-  progress: true,
-  stats: {
-    timings: true,
-    version: true,
-    warnings: true,
-    colors: true,
-  },
-});
-
-const devServer = new WebpackDevServer(compiler, devServerConfig);
 const portfinder = require('portfinder')
-
 // const readyPromise = () => {
 //   return new Promise((resolve, reject) => {
 //     portfinder.basePort = process.env.PORT || config.dev.port
@@ -86,14 +58,68 @@ const portfinder = require('portfinder')
 // }
 
 // const isInteractive = process.stdout.isTTY;
-const spinner = ora('starting for development...')
-spinner.start()
+
+const spinnerDll = ora({
+  color: 'green',
+  text: 'Dll生产中...'
+})
+const rm = require('rimraf')
+spinnerDll.start()
+rm(utils.resolve('/libs'),  err => {
+  if (err) throw err
+  Webpack(dllWebpackConfig, function (err, stats) {
+    spinnerDll.stop()
+    if (err) throw err
+    process.stdout.write(stats.toString({
+      colors: true,
+      modules: false,
+      children: false,
+      chunks: false,
+      chunkModules: false
+    }) + '\n\n')
+
+    console.log(chalk.cyan('  dll succeed ！.\n'))
+  })
+});
+
+
+// Add FriendlyErrorsPlugin
+devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
+  compilationSuccessInfo: {
+    messages: [`Your application is running here: http://${HOST}:${PORT}`],
+  },
+  onErrors: config.dev.notifyOnErrors
+    ? utils.createNotifierCallback()
+    : undefined
+}));
+
+const devServerConfig = Object.assign({}, devWebpackConfig.devServer, {
+  // open: true,
+  // hot: true,
+  // lazy: true,
+  inline: true,
+  // config:
+  progress: true,
+  stats: {
+    // timings: true,
+    // version: true,
+    // warnings: true,
+    colors: true,
+  },
+});
+
+const compiler = Webpack(devWebpackConfig)
+const devServer = new WebpackDevServer(compiler, devServerConfig);
+
+const spinnerDev = ora('starting for development...')
+spinnerDev.start()
 // Launch WebpackDevServer.
 devServer.listen(PORT, HOST, err => {
     if (err) {
       return console.log(err);
     }
-    spinner.stop()
+    console.log("PORT", PORT, HOST);
+    spinnerDev.stop()
     // if (err) throw err
     // if (isInteractive) {
     //   clearConsole();

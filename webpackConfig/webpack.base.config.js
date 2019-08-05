@@ -117,14 +117,10 @@ module.exports = {
     },
     plugins: [
         new webpack.ProgressPlugin(),
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: './public/index.html', //resolve('/public/index.html'),
-            inject: true
-        }),
         new ManifestPlugin({
             fileName: 'asset-manifest.json',
             // publicPath: '/',
+            basePath: config.build.assetsRoot,
             publicPath: process.env.NODE_ENV === 'production'
             ? config.build.assetsPublicPath
             : config.dev.assetsPublicPath,
@@ -138,6 +134,17 @@ module.exports = {
                     files: manifestFiles,
                 };
             },
+        }),
+        //自动生成html文件
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: './public/index.html', //resolve('/public/index.html'),
+            inject: true,
+            hash: true,
+            cache: true,
+            chunks: ['main', 'vendors'],
+            // chunksSortMode: 'dependency',
+            favicon: utils.resolve('/public/favicon.ico'),
         }),
     ],
     // 配置模块如何解析
