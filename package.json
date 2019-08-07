@@ -4,6 +4,7 @@
   "description": "",
   "private": false,
   "scripts": {
+    "build_libs": "node webpackRun/create.dll.js",
     "start": "node webpackRun/start.js",
     "build": "node webpackRun/build.js",
     "mockserver": "nodemon mock/server.js",
@@ -99,6 +100,7 @@
     "less-plugin-npm-import": "^2.1.0",
     "localstorage-polyfill": "^1.0.1",
     "map-json-webpack-plugin": "^1.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "mockjs": "^1.0.1-beta3",
     "node-notifier": "^5.4.0",
     "nodemon": "^1.19.1",

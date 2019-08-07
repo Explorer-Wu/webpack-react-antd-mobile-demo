@@ -15,6 +15,7 @@ module.exports = {
     //要打包的模块的数组
     entry: {
         vendor: [
+            '@babel/polyfill',
             'react',
             'react-dom',
             'react-router-dom',
@@ -27,16 +28,16 @@ module.exports = {
         ]
     },
     output: {
-        path: '/libs',  // config.build.assetsRoot+
+        path: utils.resolve('libs'),  // config.build.assetsRoot+
         filename: '[name].dll.js',
         // filename: '[name].[hash]js',
         chunkFilename: '[name].dll.[chunkhash].js',  //决定 non-entry chunk(非入口 chunk) 的名称
         library: '[name]_dll_[hash]',
         libraryTarget: 'umd',
-        //publicPath: "/"
-        publicPath: process.env.NODE_ENV === 'production'
-            ? config.build.assetsPublicPath
-            : config.dev.assetsPublicPath
+        publicPath: "/"
+        // publicPath: process.env.NODE_ENV === 'production'
+        //     ? config.build.assetsPublicPath
+        //     : config.dev.assetsPublicPath
     },
     module: {
         rules: [
@@ -68,7 +69,7 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             limit: 10000,
-                            // name: utils.assetsPath('static/media/[name].[hash:7].[ext]')
+                            // name: utils.assetsPath('media/[name].[hash:7].[ext]')
                         }
                     }
                 ],
@@ -141,7 +142,7 @@ module.exports = {
                           loader: 'url-loader',
                           options: {
                               limit: 10000,
-                              name: utils.assetsPath('static/images/[name].[hash:7].[ext]')
+                              name: utils.assetsPath('images/[name].[hash:7].[ext]')
                           }
                       }
                  ]
@@ -156,14 +157,14 @@ module.exports = {
         // 清除上一次生成的文件
         // new CleanWebpackPlugin(), ['/libs'], 
         new CleanWebpackPlugin({
-            // root: utils.resolve('/libs'), // 绝对路径 utils.resolve('/dist'),
+            root: utils.resolve('libs'), // 绝对路径 utils.resolve('/dist'),
             verbose: true, // 是否显示到控制台
             dry: false // 不删除所有
         }),
         new webpack.DllPlugin({
-            path: utils.resolve('/libs/[name]-dll-manifest.json'),
-            name: '[name]_dll_[hash]', 
-            context: utils.resolve('/libs/'), 
+            context: utils.resolve('libs'),
+            path: utils.resolve('libs/[name]-dll-manifest.json'),
+            name: '[name]_dll_[hash]',
         }),
     ],
 };

@@ -56,7 +56,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('static/images/[name].[hash:7].[ext]')
+                    name: utils.assetsPath('images/[name].[hash:7].[ext]')
                 }
             },
             {
@@ -64,7 +64,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('static/media/[name].[hash:7].[ext]')
+                    name: utils.assetsPath('media/[name].[hash:7].[ext]')
                 }
             },
             {
@@ -72,7 +72,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('static/fonts/[name].[hash:7].[ext]')
+                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
                 }
             }
         ]
@@ -142,9 +142,9 @@ module.exports = {
             inject: true,
             hash: true,
             cache: true,
-            chunks: ['main', 'vendors'],
-            // chunksSortMode: 'dependency',
-            favicon: utils.resolve('/public/favicon.ico'),
+            // chunks: ['main', 'vendors'],
+            chunksSortMode: 'dependency',
+            favicon: utils.resolve('public/favicon.ico'),
         }),
     ],
     // 配置模块如何解析

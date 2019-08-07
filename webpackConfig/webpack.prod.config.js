@@ -7,11 +7,11 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+// const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../webpackConfig/test.env')
@@ -21,15 +21,17 @@ const env = process.env.NODE_ENV === 'testing'
 const prodConfig = {
     mode: 'production',
     devtool: config.build.productionSourceMap ? config.build.devtool : false,
+    name: "app",
+    dependencies: ["vendor"],
     // 在第一个错误出现时抛出失败结果，而不是容忍它。默认情况下，当使用 HMR 时，webpack 会将在终端以及浏览器控制台中，以红色文字记录这些错误，但仍然继续进行打包。
     bail: true,
     output: {
         path: config.build.assetsRoot,
         filename: utils.assetsPath('js/[name].[chunkhash].js'),
-        chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-        // publicPath: process.env.NODE_ENV === 'production' ?
-        //     config.build.assetsPublicPath :
-        //     config.dev.assetsPublicPath
+        chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
+        publicPath: process.env.NODE_ENV === 'production' ?
+            config.build.assetsPublicPath :
+            config.dev.assetsPublicPath
     },
     module: {
         rules: [{
@@ -48,29 +50,59 @@ const prodConfig = {
             }],
         },{
             test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                // use: ["css-loader?modules&localIdentName=[local]-[hash:base64:5]", "postcss-loader"]
-                use: [
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            localIdentName: '[local]--[hash:base64:5]',
-                            // url: false,
+            use: [
+                MiniCssExtractPlugin.loader,
+                {
+                    loader: 'css-loader',
+                    options: {
+                        modules: {
+                            // mode: 'local',
+                            // localIdentName: '[path][name]__[local]--[hash:base64:5]',
+                            // context: utils.resolve('/'),
+                            // hashPrefix: 'my-custom-hash',
+                            url: false,
                             minimize: true,
                             sourceMap: true
-                        }
-                    },
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true
-                        }
+                        }      
                     }
-                ]
-            })
-        }],
+                },
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }
+            ]
+        }
+            // , {
+            // test: /\.less$/i,
+            // // use: ExtractTextPlugin.extract({
+            // //     fallback: 'style-loader',
+            // use: [
+            //     MiniCssExtractPlugin.loader,
+            //     {
+            //         loader: 'css-loader',
+            //         options: {
+            //             modules: {
+            //                 // mode: 'local',
+            //                 // localIdentName: '[path][name]__[local]--[hash:base64:5]',
+            //                 // context: utils.resolve('/'),
+            //                 // hashPrefix: 'my-custom-hash',
+            //                 url: false,
+            //                 minimize: true,
+            //                 sourceMap: true
+            //             }      
+            //         }
+            //     },
+            //     {
+            //         loader: 'less-loader',
+            //         options: {
+            //             sourceMap: true
+            //         }
+            //     }
+            // ]
+            // },
+        ],
         // rules: utils.styleLoaders({
         //     sourceMap: config.build.productionSourceMap,
         //     extract: true,
@@ -87,28 +119,28 @@ const prodConfig = {
                     // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
                 }
             }),
+            new OptimizeCSSAssetsPlugin({})
         ],
     },
     // 插件配置
     plugins: [
-        new CleanWebpackPlugin(['dist']), //new CleanWebpackPlugin(['dist/*.*']), // 每次打包前清空
-        new ExtractTextPlugin({
-            filename: utils.assetsPath('css/[name].[contenthash].css'), //'[name].[chunkhash].css',
-            // disable: false,
-            allChunks: true
+        new CleanWebpackPlugin(), //new CleanWebpackPlugin(['dist/*.*']), // 每次打包前清空
+        // new ExtractTextPlugin({
+        //     filename: utils.assetsPath('css/[name].[contenthash].css'), //'[name].[chunkhash].css',
+        //     // disable: false,
+        //     allChunks: true
+        // }),
+        new MiniCssExtractPlugin({
+            filename: utils.assetsPath('css/[name].[contenthash].css'),
+            chunkFilename: "css/[id].[contenthash].css"
         }),
         // Compress extracted CSS. We are using this plugin so that possible
         // duplicated CSS from different components can be deduped.
-        new OptimizeCSSPlugin({
+        new OptimizeCSSAssetsPlugin({
             cssProcessorOptions: config.build.productionSourceMap
                 ? { safe: true, map: { inline: false } }
                 : { safe: true }
         }),
-        // new MiniCssExtractPlugin({ // 压缩css
-        //     filename: "[name].[contenthash].css",
-        //     chunkFilename: "[id].[contenthash].css"
-        // }),
-        // new OptimizeCssAssetsPlugin()
         new HtmlWebpackPlugin({
             filename: process.env.NODE_ENV === 'testing'
               ? 'index.html'
@@ -122,7 +154,10 @@ const prodConfig = {
               // more options:
               // https://github.com/kangax/html-minifier#options-quick-reference
             },
-            chunksSortMode: 'dependency'
+            // chunksSortMode: 'dependency'
+            // chunks: ['main', 'vendors'],
+            chunksSortMode: 'dependency',
+            favicon: utils.resolve('/public/favicon.ico'),
         }),
         // keep module.id stable when vender modules does not change
         new webpack.HashedModuleIdsPlugin(),
@@ -131,12 +166,12 @@ const prodConfig = {
         
         // copy custom static assets
         new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, '../public/static'),
+            from: utils.resolve('public/static'),
             to: config.build.assetsSubDirectory,
             ignore: ['.*']
         }])
     ],
-    externals: { React: 'React', 'react-dom': 'react-dom' },
+    // externals: { React: 'React', 'react-dom': 'react-dom' },
     performance: {
         hints: "warning", // "warning" 枚举;  "error",性能提示中抛出错误;  false, 关闭性能提示   
         maxAssetSize: 200000, // 整数类型（以字节为单位）此选项根据单个资源体积，控制 webpack 何时生成性能提示。默认值是：250000 (bytes)。

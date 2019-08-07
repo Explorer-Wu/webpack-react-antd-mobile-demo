@@ -104,7 +104,7 @@ const devConfig = {
             : false,
         publicPath: config.dev.assetsPublicPath,
         proxy: config.dev.proxyTable,
-        quiet: true, // necessary for FriendlyErrorsPlugin
+        // quiet: true, // necessary for FriendlyErrorsPlugin
         watchOptions: {
             poll: config.dev.poll,
         }
@@ -117,20 +117,19 @@ const devConfig = {
         new webpack.HotModuleReplacementPlugin(),
         // - new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
         // - new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.ProvidePlugin({
-            _: "lodash"
-        }),
+        // new webpack.ProvidePlugin({
+        //     _: "lodash"
+        // }),
         //开发环境使用dll分割代码
         new webpack.DllReferencePlugin({
-            context: utils.resolve('/libs'),  //(绝对路径) manifest (或者是内容属性)中请求的上下文
-            manifest: utils.resolve('/[name]-dll-manifest.json'), //包含 content 和 name 的对象，或者在编译时(compilation)的一个用于加载的 JSON manifest 绝对路径
-            //dll 暴露的地方的名称 (默认值为 manifest.name) (可参考 externals)
-            name: '[name]_dll_[hash]', // 当前Dll的所有内容都会存放在这个参数指定变量名的一个全局变量下，注意与DllPlugin的name参数保持一致
-           // dll 是如何暴露的 (libraryTarget)
-            sourceType: 'umd', //对应 dll.config 中的 libraryTarget: 'umd'
-            //sourceType: "commonsjs",
             //content (optional): 请求到模块 id 的映射 (默认值为 manifest.content)
-            //scope (optional): dll 中内容的前缀
+            context: utils.resolve('libs'),  //(绝对路径) manifest (或者是内容属性)中请求的上下文
+            manifest: utils.resolve('libs/vendor-dll-manifest.json'), //包含 content 和 name 的对象，或者在编译时(compilation)的一个用于加载的 JSON manifest 绝对路径
+            //dll 暴露的地方的名称 (默认值为 manifest.name) (可参考 externals)
+            name: './libs/vendor.dll.js', // 当前Dll的所有内容都会存放在这个参数指定变量名的一个全局变量下，注意与DllPlugin的name参数保持一致
+           // dll 是如何暴露的 (libraryTarget)
+            sourceType: 'umd', //对应 dll.config 中的 libraryTarget: 'umd'  //sourceType: "commonsjs",
+            scope: 'vendor', //dll 中内容的前缀
         }),
         // new webpack.DllReferencePlugin({
         // //scope: "beta",  用于访问dll的内容的前缀
@@ -144,7 +143,7 @@ const devConfig = {
         // copy custom static assets
         new CopyWebpackPlugin([
             {
-                from: path.resolve(__dirname, '../public/static'),
+                from: utils.resolve('public/static'),
                 to: config.dev.assetsSubDirectory,
                 ignore: ['.*']
             }

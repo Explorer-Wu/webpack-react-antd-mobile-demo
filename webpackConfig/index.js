@@ -1,4 +1,4 @@
-'use strict'
+
 const path = require('path')
 
 module.exports = {
@@ -14,7 +14,12 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'
-        }
+        },
+        // onProxyReq: function(proxyReq, req, res) {
+        //   // add custom header to request
+        //   proxyReq.setHeader('Cookie', 'username=wuwh; sessionid=xxxxx');
+        //   // or log the req
+        // }
       },
       '/apicharts': {
         target: 'http://172.0.0.1:3650',
