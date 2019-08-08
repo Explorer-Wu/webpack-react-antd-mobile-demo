@@ -149,44 +149,6 @@ const devConfig = {
             }
         ])
     ],
-    // library 需要一个名为 lodash 的依赖，这个依赖在 consumer 环境中必须存在且可用
-    // externals: [
-    //     {
-    //       // String
-    //     //   react: 'react',
-    //       'react': {
-    //         commonjs: 'react',
-    //         commonjs2: 'react',
-    //         amd: 'react',
-    //         root: 'React',
-    //       },
-    //       'react-dom': {
-    //         commonjs: 'react-dom',
-    //         commonjs2: 'react-dom',
-    //         amd: 'react-dom',
-    //         root: 'ReactDOM',
-    //       },
-    //       // Object
-    //       'lodash': {
-    //         commonjs: 'lodash',
-    //         commonjs2: 'lodash',
-    //         amd: 'lodash',
-    //         root: '_' // indicates global variable
-    //       },
-    //         'react-router-dom': 'react-router-dom',
-    //         'react-router-config': 'react-router-config'
-    //     //   'react-redux': 'react-redux'
-    //       // Array,  subtract 可以通过全局 math 对象下的属性 subtract 访问（例如 window['math']['subtract']）
-    //       //subtract: ['./math', 'subtract'] 
-    //     },
-    //     // Function 对于 webpack 外部化，通过定义函数来控制行为, 'commonjs'+ request 定义了需要外部化的模块类型。
-    //     // function(context, request, callback) {
-    //     //     if (/^yourregex$/.test(request)){
-    //     //     return callback(null, 'commonjs ' + request);
-    //     //     }
-    //     //     callback();
-    //     // },
-    // ]
 };
 
 // const devWebpackConfig = merge({
