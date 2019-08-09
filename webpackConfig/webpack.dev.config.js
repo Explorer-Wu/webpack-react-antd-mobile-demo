@@ -38,42 +38,43 @@ const devConfig = {
                 test: /\.(js|mjs|jsx|ts|tsx)$/, //test: /\.(js|jsx)$/,  //test: /\.js$/,
                 exclude: /\/node_modules\//,
                 include: [path.resolve(__dirname, '../src'), path.resolve(__dirname, '../test')], //resolve('node_modules/webpack-dev-server/client')  path.join(__dirname, 'src') 
-                // use: ['babel-loader?cacheDirectory=true'], 
-                use: [{
-                    loader: 'babel-loader',
-                    /*cacheDirectory是用来缓存编译结果，下次编译加速*/
-                    options: {
-                        cacheDirectory: true,
-                        // cacheCompression: isEnvProduction,
-                        // compact: isEnvProduction,
-                    }
-                }],
+                // use: ['babel-loader?cacheDirectory=true'], 之前是使用这种方式直接使用 loader
+                // 现在用下面的方式替换成 happypack/loader，并使用 id 指定创建的 HappyPack 插件
+                use: [ 'happypack/loader?id=babel' ]  // use: 'happypack/loader?id=jsx'
+                // use: [{
+                //     loader: 'babel-loader',
+                //     /*cacheDirectory是用来缓存编译结果，下次编译加速*/
+                //     options: {
+                //         cacheDirectory: true,
+                //         // cacheCompression: isEnvProduction,
+                //         // compact: isEnvProduction,
+                //     }
+                // }],
             },
             // ...utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
             {
-                test: /\.css$/,
-                // use: ExtractTextPlugin.extract({
-                //     fallback: "style-loader",
-                //     use: "css-loader",
-                //     publicPath: "/dist"
-                // })
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    // {
-                    //     loader: 'css-loader',
-                    //     options: {
-                    //         modules: {
-                    //             mode: 'local',
-                    //             localIdentName: '[path][name]__[local]--[hash:base64:5]',
-                    //             context: utils.resolve('/'),
-                    //             hashPrefix: 'my-custom-hash',
-                    //         }  
-                    //     }
-                    // },
-                    'postcss-loader',
-                    // 'sass-loader'
-                ]
+                test: /\.(css|less)$/,
+                // use: [
+                //     'style-loader',
+                //     'css-loader',
+                //     // {
+                //     //     loader: 'css-loader',
+                //     //     options: {
+                //     //         modules: {
+                //     //             mode: 'local',
+                //     //             localIdentName: '[path][name]__[local]--[hash:base64:5]',
+                //     //             context: utils.resolve('/'),
+                //     //             hashPrefix: 'my-custom-hash',
+                //     //         }  
+                //     //     }
+                //     // },
+                //     'postcss-loader',
+                //     'less-loader'
+                // ]
+                
+                // 现在用下面的方式替换成 happypack/loader，并使用 id 指定创建的 HappyPack 插件
+                use: ['happypack/loader?id=styles'],
+                include: path.resolve(__dirname, 'src')
             }
         ]
     },
@@ -140,6 +141,58 @@ const devConfig = {
         // // extensions: [".js", ".jsx"]
         // }),
 
+        new HappyPack({
+            /*
+             * 必须配置项
+             */
+            // id 标识符，要和 rules 中指定的 id 对应起来
+            id: 'babel',
+            // 需要使用的 loader，用法和 rules 中 Loader 配置一样
+            // 可以直接是字符串，也可以是对象形式
+            loaders: [{
+                loader: 'babel-loader',
+                options: {
+                    /*cacheDirectory是用来缓存编译结果，下次编译加速*/
+                    cacheDirectory: true,
+                    presets: [ 'env','react' ,'flow'],
+                    plugins: ['syntax-dynamic-import','transform-object-rest-spread']
+                }
+            }],
+            // 使用共享进程池中的进程处理任务
+            threadPool: happyThreadPool
+        }),
+        new HappyPack({
+            /*
+             * 必须配置
+             */
+            // id 标识符，要和 rules 中指定的 id 对应起来
+            id: 'styles',
+            // 需要使用的 loader，用法和 rules 中 Loader 配置一样
+            // 可以直接是字符串，也可以是对象形式
+            loaders: ['style-loader', 
+                {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                },
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: () => [autoprefixer()]
+                    }
+                },
+                {
+                    loader: 'less-loader',
+                    options: {
+                        javascriptEnabled: true,
+                    }
+                }
+            ],
+            // 使用共享进程池中的进程处理任务
+            threadPool: happyThreadPool
+        }),
+        
         // copy custom static assets
         new CopyWebpackPlugin([
             {
