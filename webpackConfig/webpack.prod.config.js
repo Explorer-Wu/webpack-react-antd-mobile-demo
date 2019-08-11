@@ -164,7 +164,7 @@ const prodConfig = {
         // }),
         new MiniCssExtractPlugin({
             filename: utils.assetsPath('css/[name].[contenthash].css'),
-            chunkFilename: "css/[id].[contenthash].css"
+            chunkFilename: "static/css/[id].[contenthash].css"
         }),
         // Compress extracted CSS. We are using this plugin so that possible
         // duplicated CSS from different components can be deduped.
