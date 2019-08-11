@@ -5,10 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const postcssNormalize = require('postcss-normalize');
 
-const HappyPack = require('happypack');
-const os = require('os')
-// 创建 happypack 共享进程池，其中包含 x 个子进程
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+const HappyPackPlugin = require('./happypack.plugin');
 
 let utils = require('./utils')
 let config = require('./index')
@@ -45,7 +42,7 @@ module.exports = {
                 test: /\.(js|jsx)$/, // /\.(js|mjs|jsx|ts|tsx)$/,
                 enforce: 'pre',
                 exclude: /\/node_modules\//,
-                include: [utils.resolve('src')],
+                include: [utils.resolve('src'), utils.resolve('libs'), utils.resolve('test')],
                 use: 'happypack/loader?id=eslint'
             },
             {
@@ -143,27 +140,7 @@ module.exports = {
             chunksSortMode: 'dependency',
             favicon: utils.resolve('public/favicon.ico'),
         }),
-        new HappyPack({
-            /*
-             * 必须配置
-             */
-            // id 标识符，要和 rules 中指定的 id 对应起来
-            id: 'eslint',
-            // 需要使用的 loader，用法和 rules 中 Loader 配置一样
-            // 可以直接是字符串，也可以是对象形式
-            loaders: [
-                {
-                    loader: 'eslint-loader',
-                    options: {
-                        // emitWarning: true,
-                        formatter: require.resolve('react-dev-utils/eslintFormatter'),
-                        eslintPath: require.resolve('eslint'),
-                    },
-                }, 
-            ],
-            // 使用共享进程池中的进程处理任务
-            threadPool: happyThreadPool
-        })
+        ...HappyPackPlugin
     ],
     // 配置模块如何解析
     // 请求重定向，显示指出依赖查找路径  resolve.alias 配置路径映射，减少文件递归解析

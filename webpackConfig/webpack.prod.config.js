@@ -38,69 +38,45 @@ const prodConfig = {
         rules: [{
             test: /\.(js|mjs|jsx|ts|tsx)$/, //test: /\.(js|jsx)$/,  //test: /\.js$/,
             exclude: /\/node_modules\//,
-            include: [utils.resolve('src'), utils.resolve('test')], //path.join(__dirname, 'src')
-            // use: ['babel-loader?cacheDirectory=true'], 
-            use: [{
-                loader: 'babel-loader',
-                /*cacheDirectory是用来缓存编译结果，下次编译加速*/
-                options: {
-                    cacheDirectory: true,
-                    cacheCompression: true,
-                    compact: true,
-                }
-            }],
+            // include: [utils.resolve('src'), utils.resolve('libs'), utils.resolve('test')],
+            use: 'happypack/loader?id=babel'
+            // use: [{
+            //     loader: 'babel-loader',
+            //     /*cacheDirectory是用来缓存编译结果，下次编译加速*/
+            //     options: {
+            //         cacheDirectory: true,
+            //         cacheCompression: true,
+            //         compact: true,
+            //     }
+            // }],
         },{
-            test: /\.css$/,
+            test: /\.(css|less)$/,
+            use: [ MiniCssExtractPlugin.loader, 'happypack/loader?id=styles' ],
             // use: [
             //     MiniCssExtractPlugin.loader,
-            //     'css-loader',
-            //     'postcss-loader',
-            //     // 'less-loader',
-            // ],
-            use: [
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                },
-                {
-                    loader: 'postcss-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                }
-            ]
-        }
-            , {
-            test: /\.less$/i,
-            // use: ExtractTextPlugin.extract({
-            //     fallback: 'style-loader',
-            use: [
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader',
-                    options: {
-                        modules: {
-                            // mode: 'local',
-                            // localIdentName: '[path][name]__[local]--[hash:base64:5]',
-                            // context: utils.resolve('/'),
-                            // hashPrefix: 'my-custom-hash',
-                            // url: false,
-                            sourceMap: true
-                        }      
-                    }
-                },
-                {
-                    loader: 'less-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                }
-            ]
-            },
-        ],
+            //     {
+            //         loader: 'css-loader',
+            //         options: {
+                        // modules: {
+                        // mode: 'local',
+                        // localIdentName: '[path][name]__[local]--[hash:base64:5]',
+                        // context: utils.resolve('/'),
+                        // hashPrefix: 'my-custom-hash',
+                        // url: false,
+                        //     sourceMap: true
+                        // }  
+
+            //             sourceMap: true
+            //         }
+            //     },
+            //     {
+            //         loader: 'postcss-loader',
+            //         options: {
+            //             sourceMap: true
+            //         }
+            //     }
+            // ]
+        }],
         // rules: utils.styleLoaders({
         //     sourceMap: config.build.productionSourceMap,
         //     extract: true,
