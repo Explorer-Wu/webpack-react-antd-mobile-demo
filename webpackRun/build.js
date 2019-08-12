@@ -6,7 +6,8 @@ process.env.NODE_ENV = 'production'
 const ora = require('ora')
 const rm = require('rimraf')
 const path = require('path')
-const chalk = require('chalk')
+// const chalk = require('chalk')
+const chalk = require('react-dev-utils/chalk')
 const Webpack = require('webpack')
 const config = require('../webpackConfig')
 const webpackProdConfig = require('../webpackConfig/webpack.prod.config')
@@ -17,7 +18,7 @@ spinner.start()
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
 
-  console.log("webpackProdConfig:", webpackProdConfig)
+  // console.log("webpackProdConfig:", webpackProdConfig)
 
   Webpack(webpackProdConfig, (err, stats) => {
     spinner.stop()

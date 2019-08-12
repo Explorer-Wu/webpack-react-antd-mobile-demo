@@ -156,7 +156,12 @@ const prodConfig = {
     },
     // 插件配置
     plugins: [
-        new CleanWebpackPlugin(), //new CleanWebpackPlugin(['dist/*.*']), // 每次打包前清空
+      // new CleanWebpackPlugin(), //new CleanWebpackPlugin(['dist/*.*']), // 每次打包前清空
+      new CleanWebpackPlugin({
+        root: utils.resolve('dist'), // 绝对路径
+        verbose: true, // 是否显示到控制台
+        dry: false // 不删除所有
+      }),
         // new ExtractTextPlugin({
         //     filename: utils.assetsPath('css/[name].[contenthash].css'), //'[name].[chunkhash].css',
         //     // disable: false,
@@ -283,8 +288,9 @@ if (config.build.productionGzip) {
 }
 
 if (config.build.bundleAnalyzerReport) {
-    const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-    prodConfig.plugins.push(new BundleAnalyzerPlugin())
+  console.log("bundleAnalyzerReport:", config.build.bundleAnalyzerReport, process.env)
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  prodConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 
 module.exports = merge(baseWebpackConfig, prodConfig);

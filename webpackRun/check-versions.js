@@ -1,5 +1,6 @@
-'use strict'
-const chalk = require('chalk')
+
+// const chalk = require('chalk')
+const chalk = require('react-dev-utils/chalk')
 const semver = require('semver')
 const packageConfig = require('../package.json')
 const shell = require('shelljs')
