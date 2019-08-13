@@ -288,33 +288,35 @@ const prodConfig = {
 };
 
 if (config.build.productionGzip) {
-    const ZipPlugin = require('zip-webpack-plugin') //CompressionWebpackPlugin = require('compression-webpack-plugin')
+  // const ZipPlugin = require('zip-webpack-plugin')
+  const CompressionWebpackPlugin = require('compression-webpack-plugin')
     prodConfig.plugins.push(
-        // new CompressionWebpackPlugin({
-        //   filename: '[path].gz[query]',
-        //   algorithm: 'gzip',
-        //   test: new RegExp(
-        //       '\\.(' +
-        //       config.build.productionGzipExtensions.join('|') +
-        //       ')$'
-        //   ),
-        //   include: /\/static$/,
-        //   threshold: 10240,
-        //   minRatio: 0.8
-        // })
-      new ZipPlugin({
-        path: utils.resolve('dist'),
-        filename: 'dist.zip',
-        fileOptions: {
-          mtime: new Date(),
-          mode: 0o100664,
-          compress: true,
-          forceZip64Format: false,
-        },
-        zipOptions: {
-          forceZip64Format: false,
-        },
-      })
+        new CompressionWebpackPlugin({
+          filename: '[path].gz[query]',
+          algorithm: 'gzip',
+          test: new RegExp(
+              '\\.(' +
+              config.build.productionGzipExtensions.join('|') +
+              ')$'
+          ),
+          include: /\/static$/,
+          threshold: 10240,
+          minRatio: 0.8
+        }),
+      
+      // new ZipPlugin({
+      //   path: utils.resolve('dist'),
+      //   filename: 'dist.zip',
+      //   fileOptions: {
+      //     mtime: new Date(),
+      //     mode: 0o100664,
+      //     compress: true,
+      //     forceZip64Format: false,
+      //   },
+      //   zipOptions: {
+      //     forceZip64Format: false,
+      //   },
+      // })
     )
 }
 
