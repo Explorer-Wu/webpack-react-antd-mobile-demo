@@ -20,9 +20,9 @@ const prodCssConfig = [
         loader: 'postcss-loader',
         options: {
             sourceMap: true,
-            plugins: () => [
-                require('autoprefixer')()
-            ],
+            // plugins: () => [
+            //     require('autoprefixer')()
+            // ],
         }
     },     
     {
