@@ -15,7 +15,6 @@ module.exports = {
     //要打包的模块的数组
     entry: {
         vendor: [
-            '@babel/polyfill',
             'react',
             'react-dom',
             'react-router-dom',
@@ -149,9 +148,10 @@ module.exports = {
             },
         ]
     },
-    // optimization: {
-    //     sideEffects: true
-	// },
+    optimization: {
+        // 如果所有代码都不包含 side effect，我们就可以简单地将该属性标记为 false，来告知 webpack，它可以安全地删除未用到的 export。
+        sideEffects: true
+	},
     plugins: [
         new webpack.ProgressPlugin(),
         // 清除上一次生成的文件

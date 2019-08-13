@@ -6,6 +6,9 @@
 # testing
 /coverage
 
+# library
+/libs
+
 # production
 /dist
 

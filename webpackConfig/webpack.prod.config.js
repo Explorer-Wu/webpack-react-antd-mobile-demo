@@ -111,37 +111,55 @@ const prodConfig = {
                 comparisons: false,
                 inline: 2,
               },
-              mangle: {
-                safari10: true,
-              },
+              mangle: true, // Note `mangle.properties` is `false` by default.
+              // mangle: {
+              //   safari10: true,
+              // },
               output: {
                 ecma: 5,
                 comments: false,
                 ascii_only: true,
               },
+              warnings: true,
+              module: false,
+              toplevel: false,     
+              nameCache: null,
+              ie8: false,
+              // keep_classnames: undefined,
+              // keep_fnames: false,
+              // safari10: false,
             },
+            // Enable file caching
+            cache: true,
             // Use multi-process parallel running to improve the build speed
             // Default number of concurrent runs: os.cpus().length - 1
             // Disabled on WSL (Windows Subsystem for Linux) due to an issue with Terser
             // https://github.com/webpack-contrib/terser-webpack-plugin/issues/21
             parallel: true,
-            // Enable file caching
-            cache: true,
             // sourceMap: shouldUseSourceMap,
-            sourceMap: true,
+            sourceMap: true, // Must be set to true if using source-maps in production
           }),
           // This is only used in production mode
+          // Compress extracted CSS. We are using this plugin so that possible
+          // duplicated CSS from different components can be deduped.
           new OptimizeCSSAssetsPlugin({
-            // cssProcessorOptions: {
-            //   parser: true, //safePostCssParser,
-            //   map: {
-            //         // `inline: false` forces the sourcemap to be output into a separate file
-            //         inline: false,
-            //         // `annotation: true` appends the sourceMappingURL to the end of
-            //         // the css file, helping the browser find the sourcemap
-            //         annotation: true,
-            //   }  //: false,
+            // assetNameRegExp: /\.optimize\.css$/g,
+            cssProcessor: require('cssnano'),
+            canPrint: true,
+            // cssProcessorPluginOptions: {
+            //   preset: ['default', { discardComments: { removeAll: true } }],
             // },
+            cssProcessorOptions: config.build.productionSourceMap
+              ? {
+                safe: true,
+                map: {
+                    // `inline: false` forces the sourcemap to be output into a separate file
+                  inline: false,
+                  // `annotation: true` appends the sourceMappingURL to the end of
+                  // the css file, helping the browser find the sourcemap
+                  annotation: true,
+                }
+              } : { safe: true }
           }),
         ],
         // Automatically split vendor and commons
@@ -162,69 +180,65 @@ const prodConfig = {
         verbose: true, // 是否显示到控制台
         dry: false // 不删除所有
       }),
-        // new ExtractTextPlugin({
-        //     filename: utils.assetsPath('css/[name].[contenthash].css'), //'[name].[chunkhash].css',
-        //     // disable: false,
-        //     allChunks: true
-        // }),
-        new MiniCssExtractPlugin({
-            filename: utils.assetsPath('css/[name].[contenthash].css'),
-            chunkFilename: "static/css/[id].[contenthash].css"
-        }),
-        // Compress extracted CSS. We are using this plugin so that possible
-        // duplicated CSS from different components can be deduped.
-        new OptimizeCSSAssetsPlugin({
-            cssProcessorOptions: config.build.productionSourceMap
-                ? { safe: true, map: { inline: false } }
-                : { safe: true }
-        }),
-        new HtmlWebpackPlugin({
-            // title: 'title',
-            // cdnModule: 'react',
-            filename: process.env.NODE_ENV === 'testing'
-              ? 'index.html'
-              : config.build.index,
-            template: './public/index.html', //resolve('/public/index.html'),
-            inject: true,
-            minify: {
-              removeComments: true,
-              collapseWhitespace: true,
-              removeAttributeQuotes: true
-              // more options:
-              // https://github.com/kangax/html-minifier#options-quick-reference
-            },
-            // chunksSortMode: 'dependency'
-            // chunks: ['main', 'vendors'],
-            chunksSortMode: 'dependency',
-            favicon: utils.resolve('/public/favicon.ico'),
-        }),
-        new WebpackCdnPlugin({
-            modules: [
-                { name: 'react', var: 'React', path: `umd/react.${process.env.NODE_ENV}.min.js` },
-                { name: 'react-dom', var: 'ReactDOM', path: `umd/react-dom.${process.env.NODE_ENV}.min.js` },
-                { name: 'react-router-dom', var: 'react-router-dom', path: 'umd/react-router-dom.min.js' },
-                { name: 'react-router-config', var: 'react-router-config', path: 'umd/react-router-config.min.js'}
-            ],
-            publicPath: '/node_modules'
-       }),
-        // keep module.id stable when vender modules does not change
-        new webpack.HashedModuleIdsPlugin(),
-        // enable scope hoisting
-        // new webpack.optimize.ModuleConcatenationPlugin(),
-        
-        // copy custom static assets
-        new CopyWebpackPlugin([{
-            from: utils.resolve('public/static'),
-            to: config.build.assetsSubDirectory,
-            ignore: ['.*']
-        }])
+      // new ExtractTextPlugin({
+      //     filename: utils.assetsPath('css/[name].[contenthash].css'), //'[name].[chunkhash].css',
+      //     // disable: false,
+      //     allChunks: true
+      // }),
+      new MiniCssExtractPlugin({
+          filename: utils.assetsPath('css/[name].[contenthash].css'),
+          chunkFilename: "static/css/[id].[contenthash].css"
+      }),
+      
+      new HtmlWebpackPlugin({
+          // title: 'title',
+          // cdnModule: 'react',
+          filename: process.env.NODE_ENV === 'testing'
+            ? 'index.html'
+            : config.build.index,
+          template: './public/index.html', //resolve('/public/index.html'),
+          inject: true,
+          minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeAttributeQuotes: true
+            // more options:
+            // https://github.com/kangax/html-minifier#options-quick-reference
+          },
+          // chunksSortMode: 'dependency'
+          // chunks: ['main', 'vendors'],
+          chunksSortMode: 'dependency',
+          favicon: utils.resolve('/public/favicon.ico'),
+      }),
+      new WebpackCdnPlugin({
+          modules: [
+              { name: 'react', var: 'React', path: `umd/react.${process.env.NODE_ENV}.min.js` },
+              { name: 'react-dom', var: 'ReactDOM', path: `umd/react-dom.${process.env.NODE_ENV}.min.js` },
+              { name: 'react-router-dom', var: 'react-router-dom', path: 'umd/react-router-dom.min.js' },
+              { name: 'react-router-config', var: 'react-router-config', path: 'umd/react-router-config.min.js'}
+          ],
+          publicPath: '/node_modules'
+      }),
+      // keep module.id stable when vender modules does not change
+      new webpack.HashedModuleIdsPlugin(),
+      // enable scope hoisting
+      // new webpack.optimize.ModuleConcatenationPlugin(),
+      
+      // copy custom static assets
+      new CopyWebpackPlugin([{
+          from: utils.resolve('public/static'),
+          to: config.build.assetsSubDirectory,
+          ignore: ['.*']
+      }])
     ],
     // externals: { React: 'React', 'react-dom': 'react-dom' },
     // library 需要一个名为 lodash 的依赖，这个依赖在 consumer 环境中必须存在且可用
     externals: [
         {
           // String
-        //   react: 'react',
+          // 'react': 'React',
+          // 'react-dom': 'ReactDOM',
+          'babel-polyfill': 'window', 
           'react': {
             commonjs: 'react',
             commonjs2: 'react',
@@ -243,9 +257,13 @@ const prodConfig = {
             commonjs2: 'lodash',
             amd: 'lodash',
             root: '_' // indicates global variable
-          },
-            'react-router-dom': 'react-router-dom',
-            'react-router-config': 'react-router-config'
+        },
+        'react-router-dom': 'ReactRouterDom',
+        'react-router-config': 'ReactRouterConfig'
+        // 'redux': 'Redux',
+        // 'react-redux': 'ReactRedux',
+        // 'redux-form': 'ReduxForm',
+        // 'immutable': 'Immutable',
         //   'react-redux': 'react-redux'
           // Array,  subtract 可以通过全局 math 对象下的属性 subtract 访问（例如 window['math']['subtract']）
           //subtract: ['./math', 'subtract'] 
