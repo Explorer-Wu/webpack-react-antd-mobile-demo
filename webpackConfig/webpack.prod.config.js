@@ -299,7 +299,9 @@ if (config.build.productionGzip) {
               config.build.productionGzipExtensions.join('|') +
               ')$'
           ),
-          include: /\/static$/,
+          // cache: true,
+          // include: /\/includes/, 所有包含(include)的文件
+          // exclude: /\/excludes/, 所有排除(exclude)的文件
           threshold: 10240,
           minRatio: 0.8
         }),

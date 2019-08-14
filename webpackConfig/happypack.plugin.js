@@ -2,9 +2,9 @@ const path = require('path');
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const HappyPack = require('happypack');
-const os = require('os');
-// 创建 happypack 共享进程池，其中包含 x 个子进程
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+const os = require('os'); // node 提供的系统操作模块
+//创建 happypack 共享进程池，其中包含 x 个子进程
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length }); // 根据我的系统的内核数量 指定线程池个数 也可以其他数量
 
 // var ROOT_PATH = path.join(__dirname, '../');
 let devCssConfig = [ 'style-loader', 'css-loader', 'less-loader' ] 

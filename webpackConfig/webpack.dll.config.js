@@ -15,10 +15,13 @@ module.exports = {
     //要打包的模块的数组
     entry: {
         vendor: [
+            '@babel/polyfill',
             'react',
             'react-dom',
             'react-router-dom',
             'react-router-config',
+            'axios',
+            'lodash'
             // 'redux',
             // 'react-redux',
             // 'common/js/format',
