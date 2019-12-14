@@ -1,6 +1,6 @@
 
 const path = require('path')
-const config = require('../webpackConfig')
+const config = require('./index')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const packageConfig = require('../package.json')
 

@@ -2,7 +2,7 @@
 const path = require('path')
 const utils = require('./utils')
 const webpack = require('webpack')
-const config = require('../webpackConfig')
+const config = require('./index')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -15,8 +15,8 @@ const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const env = process.env.NODE_ENV === 'testing'
-  ? require('../webpackConfig/test.env')
-  : require('../webpackConfig/prod.env')
+  ? require('./test.env')
+  : require('./prod.env')
 
 
 const prodConfig = {
