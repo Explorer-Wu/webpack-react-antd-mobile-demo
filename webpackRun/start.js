@@ -49,6 +49,8 @@ const devServerConfig = Object.assign({}, devWebpackConfig.devServer, {
     // version: true,
     // warnings: true,
     colors: true,
+    entrypoints: false,
+    // children: false
   },
 });
 
